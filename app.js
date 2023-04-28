@@ -18,6 +18,11 @@ const sessionOptions = {
 
 app.use(session(sessionOptions));
 
-app.use("/", Route);
+app.use("/home", Route);
+
+// Redirect to log in first
+app.get("/", (req, res) => {
+    res.redirect(`http://${backendIPAddress}/home/auth_app`)
+});
 
 module.exports = app;
