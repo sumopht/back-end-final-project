@@ -1,4 +1,4 @@
-// using express.js frameworkk
+// using express.js framework
 const express = require("express");
 
 const Controller = require("../Controller");

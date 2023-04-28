@@ -22,7 +22,7 @@ app.use("/home", Route);
 
 // Redirect to log in first
 app.get("/", (req, res) => {
-    res.redirect(`http://${backendIPAddress}/home/auth_app`)
+    res.redirect(`http://${process.env.backendIPAddress}/home/auth_app`)
 });
 
 module.exports = app;
