@@ -1,7 +1,7 @@
 // using express.js framework
 const express = require("express");
 
-const Controller = require("../Controller");
+const Controller = require("./Controller");
 
 const router = express.Router();
 
