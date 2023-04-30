@@ -95,3 +95,118 @@ exports.accessToken = (req, res) => {
 // ------------------------------------------------------------------
 
 // IMPLEMENT OTHER FUNCTIONS BELOW
+
+exports.getProfileInformation = (req, res) => {
+  try {
+    const profileOptions = {
+      headers: {
+        Authorization: `Bearer ${req.session.token.access_token}`,
+      },
+    };
+    const profileReq = https.request(
+      "https://www.mycourseville.com/api/v1/public/users/me",
+      profileOptions,
+      (profileRes) => {
+        let profileData = "";
+        profileRes.on("data", (chunk) => {
+          profileData += chunk;
+        });
+        profileRes.on("end", () => {
+          const profile = JSON.parse(profileData);
+          res.send(profile);
+          res.end();
+        });
+      }
+    );
+    profileReq.on("error", (err) => {
+      console.error(err);
+    });
+    profileReq.end();
+  } catch (error) {
+    console.log(error);
+    console.log("Please logout, then login again.");
+  }
+};
+
+// TODO #3.2: Send "GET" request to CV endpoint to get all courses that you enrolled
+exports.getCourses = (req, res) => {
+  try {
+    const profileOptions = {
+      headers: {
+        Authorization: `Bearer ${req.session.token.access_token}`,
+      },
+    };
+    const profileReq = https.request(
+      "https://www.mycourseville.com/api/v1/public/users/courses",
+      profileOptions,
+      (profileRes) => {
+        let profileData = "";
+        profileRes.on("data", (chunk) => {
+          profileData += chunk;
+        });
+        profileRes.on("end", () => {
+          const profile = JSON.parse(profileData);
+          res.send(profile);
+          res.end();
+        });
+      }
+    );
+    profileReq.on("error", (err) => {
+      console.error(err);
+    });
+    profileReq.end();
+  } catch (error) {
+    console.log(error);
+    console.log("Please logout, then login again.");
+  }
+};
+
+// TODO #3.4: Send "GET" request to CV endpoint to get all course assignments based on cv_cid
+exports.getCourseAssignments = (req, res) => {
+  const cv_cid = req.params.cv_cid;
+  // You should change the response below.
+  try {
+    const profileOptions = {
+      headers: {
+        Authorization: `Bearer ${req.session.token.access_token}`,
+      },
+    };
+    const profileReq = https.request(
+      "https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=...",
+      profileOptions,
+      (profileRes) => {
+        let profileData = "";
+        profileRes.on("data", (chunk) => {
+          profileData += chunk;
+        });
+        profileRes.on("end", () => {
+          const profile = JSON.parse(profileData);
+          res.send(profile);
+          res.end();
+        });
+      }
+    );
+    profileReq.on("error", (err) => {
+      console.error(err);
+    });
+    profileReq.end();
+  } catch (error) {
+    console.log(error);
+    console.log("Please logout, then login again.");
+  }
+};
+
+// Outstanding #2
+exports.getAssignmentDetail = (req, res) => {
+  const itemid = req.params.item_id;
+  // You should change the response below.
+  res.send("This route should get assignment details based on item_id.");
+  res.end();
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy();
+  // res.redirect(`http://${process.env.frontendIPAddress}/index.html`);
+  res.redirect(authorization_url);
+  res.end();
+};
