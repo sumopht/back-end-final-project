@@ -293,9 +293,31 @@ exports.getCourseAssignments = (req, res) => {
 // Outstanding #2
 exports.getAssignmentDetail = (req, res) => {
   const itemid = req.params.item_id;
+
+  const url = `https://www.mycourseville.com/api/v1/public/get/item/assignment?item_id=${itemid}`;
   // You should change the response below.
-  res.send("This route should get assignment details based on item_id.");
-  res.end();
+  const courseReq = https.request(
+    url,
+    {
+      headers: {
+        Authorization: `Bearer ${req.session.token.access_token}`,
+      },
+    },
+    (courseRes) => {
+      let data = "";
+      courseRes.on("data", (chunk) => {
+        data += chunk;
+      });
+      courseRes.on("end", () => {
+        const dataJson = JSON.parse(data);
+        res.send(dataJson);
+      });
+    }
+  );
+  courseReq.on("error", (err) => {
+    res.status(400).send({ message: "error" });
+  });
+  courseReq.end();
 };
 
 exports.logout = (req, res) => {
