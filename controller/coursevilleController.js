@@ -160,39 +160,6 @@ exports.getProfileInformation = (req, res) => {
   }
 };
 
-// TODO #3.2: Send "GET" request to CV endpoint to get all courses that you enrolled
-// exports.getCourses = (req, res) => {
-//   try {
-//     const profileOptions = {
-//       headers: {
-//         Authorization: `Bearer ${req.session.token.access_token}`,
-//       },
-//     };
-//     const profileReq = https.request(
-//       "https://www.mycourseville.com/api/v1/public/users/courses",
-//       profileOptions,
-//       (profileRes) => {
-//         let profileData = "";
-//         profileRes.on("data", (chunk) => {
-//           profileData += chunk;
-//         });
-//         profileRes.on("end", () => {
-//           const profile = JSON.parse(profileData);
-//           res.send(profile);
-//           res.end();
-//         });
-//       }
-//     );
-//     profileReq.on("error", (err) => {
-//       console.error(err);
-//     });
-//     profileReq.end();
-//   } catch (error) {
-//     console.log(error);
-//     console.log("Please logout, then login again.");
-//   }
-// };
-
 exports.getCourses = (req, res) => {
   try {
     // console.log(req.session);
@@ -226,41 +193,6 @@ exports.getCourses = (req, res) => {
     console.log("Please logout, then login again.");
   }
 };
-
-// TODO #3.4: Send "GET" request to CV endpoint to get all course assignments based on cv_cid
-// exports.getCourseAssignments = (req, res) => {
-//   const cv_cid = req.params.cv_cid;
-//   // You should change the response below.
-//   try {
-//     const profileOptions = {
-//       headers: {
-//         Authorization: `Bearer ${req.session.token.access_token}`,
-//       },
-//     };
-//     const profileReq = https.request(
-//       "https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=...",
-//       profileOptions,
-//       (profileRes) => {
-//         let profileData = "";
-//         profileRes.on("data", (chunk) => {
-//           profileData += chunk;
-//         });
-//         profileRes.on("end", () => {
-//           const profile = JSON.parse(profileData);
-//           res.send(profile);
-//           res.end();
-//         });
-//       }
-//     );
-//     profileReq.on("error", (err) => {
-//       console.error(err);
-//     });
-//     profileReq.end();
-//   } catch (error) {
-//     console.log(error);
-//     console.log("Please logout, then login again.");
-//   }
-// };
 
 exports.getCourseAssignments = (req, res) => {
   const cv_cid = req.params.cv_cid;
@@ -325,4 +257,32 @@ exports.logout = (req, res) => {
   // res.redirect(`http://${process.env.frontendIPAddress}/index.html`);
   res.redirect(authorization_url);
   res.end();
+};
+
+exports.getCourseInfo = (req, res) => {
+  const cv_cid = req.params.cv_cid;
+  const url = `https://www.mycourseville.com/api/v1/public/get/course/info?cv_cid=${cv_cid}`;
+  // You should change the response below.
+  const courseReq = https.request(
+    url,
+    {
+      headers: {
+        Authorization: `Bearer ${req.session.token.access_token}`,
+      },
+    },
+    (courseRes) => {
+      let data = "";
+      courseRes.on("data", (chunk) => {
+        data += chunk;
+      });
+      courseRes.on("end", () => {
+        const dataJson = JSON.parse(data);
+        res.send(dataJson);
+      });
+    }
+  );
+  courseReq.on("error", (err) => {
+    res.status(400).send({ message: "error" });
+  });
+  courseReq.end();
 };
