@@ -6,6 +6,9 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
 const AppError = require("./utils/appError");
+// const APIRoutes = require("./routes/APIRoutes"); //db
+// const eventsRoutes = require("./routes/eventRoutes"); //db2
+const taskRoutes = require("./routes/taskRoutes"); //db3
 const coursevilleRoutes = require("./routes/coursevilleRoutes");
 
 const app = express();
@@ -30,6 +33,9 @@ app.use(session(sessionOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// app.use("/api", APIRoutes); //db
+// app.use("/events", eventsRoutes) //db2
+app.use("/tasks", taskRoutes) //db3
 app.use("/courseville", coursevilleRoutes);
 
 // REDIRECT TO LOG IN FIRST

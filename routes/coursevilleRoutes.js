@@ -10,6 +10,7 @@ router.get("/access_token", coursevilleController.accessToken);
 
 //------------------
 router.get("/get_profile_info", coursevilleController.getProfileInformation);
+router.get("/get_user_info", coursevilleController.getUserInfo);
 router.get("/get_courses", coursevilleController.getCourses);
 router.get("/get_course_info/:cv_cid", coursevilleController.getCourseInfo);
 router.get(

@@ -128,6 +128,38 @@ exports.accessToken = (req, res) => {
 //   }
 // };
 
+exports.getUserInfo = (req, res) => {
+  try {
+    const profileOptions = {
+      headers: {
+        Authorization: `Bearer ${req.session.token.access_token}`,
+      },
+    };
+    const profileReq = https.request(
+      "https://www.mycourseville.com/api/v1/public/get/user/info",
+      profileOptions,
+      (profileRes) => {
+        let profileData = "";
+        profileRes.on("data", (chunk) => {
+          profileData += chunk;
+        });
+        profileRes.on("end", () => {
+          const profile = JSON.parse(profileData);
+          res.send(profile);
+          res.end();
+        });
+      }
+    );
+    profileReq.on("error", (err) => {
+      console.error(err);
+    });
+    profileReq.end();
+  } catch (error) {
+    console.log(error);
+    console.log("Please logout, then login again.");
+  }
+};
+
 exports.getProfileInformation = (req, res) => {
   try {
     const profileOptions = {
