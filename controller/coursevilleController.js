@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // FOR MCV
+
 const https = require("https");
 const url = require("url");
 const querystring = require("querystring");
@@ -92,41 +93,9 @@ exports.accessToken = (req, res) => {
   }
 };
 
-// ------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
 
-// IMPLEMENT OTHER FUNCTIONS BELOW
-
-// exports.getProfileInformation = (req, res) => {
-//   try {
-//     const profileOptions = {
-//       headers: {
-//         Authorization: `Bearer ${req.session.token.access_token}`,
-//       },
-//     };
-//     const profileReq = https.request(
-//       "https://www.mycourseville.com/api/v1/public/users/me",
-//       profileOptions,
-//       (profileRes) => {
-//         let profileData = "";
-//         profileRes.on("data", (chunk) => {
-//           profileData += chunk;
-//         });
-//         profileRes.on("end", () => {
-//           const profile = JSON.parse(profileData);
-//           res.send(profile);
-//           res.end();
-//         });
-//       }
-//     );
-//     profileReq.on("error", (err) => {
-//       console.error(err);
-//     });
-//     profileReq.end();
-//   } catch (error) {
-//     console.log(error);
-//     console.log("Please logout, then login again.");
-//   }
-// };
+// FUNCTION FOR MCV
 
 exports.getUserInfo = (req, res) => {
   try {
@@ -194,8 +163,6 @@ exports.getProfileInformation = (req, res) => {
 
 exports.getCourses = (req, res) => {
   try {
-    // console.log(req.session);
-    // console.log(req.session.token);
     const profileOptions = {
       headers: {
         Authorization: `Bearer ${req.session.token.access_token}`,
@@ -229,7 +196,7 @@ exports.getCourses = (req, res) => {
 exports.getCourseAssignments = (req, res) => {
   const cv_cid = req.params.cv_cid;
   const url = `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${cv_cid}`;
-  // You should change the response below.
+
   const courseReq = https.request(
     url,
     {
@@ -254,12 +221,12 @@ exports.getCourseAssignments = (req, res) => {
   courseReq.end();
 };
 
-// Outstanding #2
+
 exports.getAssignmentDetail = (req, res) => {
   const itemid = req.params.item_id;
 
   const url = `https://www.mycourseville.com/api/v1/public/get/item/assignment?item_id=${itemid}`;
-  // You should change the response below.
+
   const courseReq = https.request(
     url,
     {
@@ -286,15 +253,14 @@ exports.getAssignmentDetail = (req, res) => {
 
 exports.logout = (req, res) => {
   req.session.destroy();
-  // res.redirect(`http://${process.env.frontendIPAddress}/index.html`);
-  res.redirect(authorization_url);
+  res.redirect("https://www.mycourseville.com/api/logout");
   res.end();
 };
 
 exports.getCourseInfo = (req, res) => {
   const cv_cid = req.params.cv_cid;
   const url = `https://www.mycourseville.com/api/v1/public/get/course/info?cv_cid=${cv_cid}`;
-  // You should change the response below.
+
   const courseReq = https.request(
     url,
     {
@@ -318,3 +284,5 @@ exports.getCourseInfo = (req, res) => {
   });
   courseReq.end();
 };
+
+// ---------------------------------------------------------------------------------------------------------

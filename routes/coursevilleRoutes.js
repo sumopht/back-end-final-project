@@ -1,4 +1,4 @@
-// USING EXPRESS.JS FRAMWORK
+// USING EXPRESS.JS FRAMEWORK
 const express = require("express");
 const coursevilleController = require("../controller/coursevilleController");
 
